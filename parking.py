@@ -1,9 +1,9 @@
 class ParkingGarage ():
 
     def __init__(self, tickets, parkingSpaces,currentTickets):
-        self.tickets = []
-        self.parkingSpaces = []
-        self.currentTickets = {}
+        self.tickets = tickets
+        self.parkingSpaces = parkingSpaces
+        self.currentTickets = currentTickets
 
     def takeTicket(self):
     
