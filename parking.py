@@ -15,9 +15,10 @@ class ParkingGarage ():
         """
     
         if len(self.tickets) != 0:
-            self.tickets.pop()
+            my_ticket = self.tickets.pop()
+            self.currentTickets.update({my_ticket:False})
             self.parkingSpaces.pop()
-            print('Have a nice day. Come back soon!')
+            print(f'You have ticket number{my_ticket}')
         else:
             print("You're not parked here!")
 
@@ -30,13 +31,12 @@ class ParkingGarage ():
             Adds to both tickets and parkingSpaces list
             updates currentTickets key 'paid' to value True
         """
-    
+        ticket_no = input('\nPlease enter your ticket number: ')
         payment= input('\nPlease enter your payment of 0.50: ')
         if payment != '':
             print('\nPayment made. You have 15 minutes to leave')
-            self.currentTickets.update({'paid':True})
-            self.tickets.append(payment)
-            self.parkingSpaces.append(payment)
+            self.currentTickets.update({ticket_no:True})
+       
 
     def leaveGarage(self):
             """
@@ -46,16 +46,17 @@ class ParkingGarage ():
             payment if currentTickets key 'paid' value is False
     
             """
+
             if self.currentTickets:
-                self.currentTickets.update({'paid':False})
-                print('\nThank You, have a nice day!')
-            else:
-                payment=input('\nPlease enter your payment of 0.50: ')
-                if payment != '':
-                    print('\nPayment made. You have 15 minutes to leave')
-                    self.currentTickets.update({'paid':True})
-                    self.tickets.append(payment)
-                    self.parkingSpaces.append(payment)
+                ticket_no = input('Turn in your ticket: ')
+                if self.currentTickets[ticket_no]:
+                    print('\nThank You, have a nice day!')
+                    self.tickets.append(ticket_no)
+                    self.parkingSpaces.append(ticket_no)
+                    del self.currentTickets[ticket_no]
+                else:
+                    self.payForParking()
+                    
 
     def showSpaces(self):
             print('Current occupied spaces: ', len(self.parkingSpaces))
@@ -68,12 +69,13 @@ class ParkingGarage ():
             while not my_garage.currentTickets or my_garage.currentTickets:
     
                 print('\nWelcome to Gotham Downtown Parking Garage!')
-                guest = input("\nAre you parking or leaving? Type 'parking','leaving' or 'quit' to quit: ")
+                guest = input("\nAre you parking or leaving? Type 'parking','paying','leaving' or 'quit' to quit: ")
                 if guest.lower() == 'parking':
-                    my_garage.payForParking()
-                    my_garage.leaveGarage()
-                elif guest.lower() =='leaving':
                     my_garage.takeTicket()
+                elif guest.lower() == 'paying':
+                    my_garage.payForParking()                
+                elif guest.lower() =='leaving':
+                    my_garage.leaveGarage()
                 elif guest.lower() == 'showt':
                     my_garage.showTickets()
                 elif guest.lower() == 'shows':
@@ -84,7 +86,7 @@ class ParkingGarage ():
                      print('Please choose from the menu!')
                 continue  
 
-my_garage = ParkingGarage([],[],{})
+my_garage = ParkingGarage(['1','2','3','4'],['1','2','3','4'],{})
 my_garage.run()
 
 
